@@ -1,0 +1,17 @@
+plugin: community.digitalocean.digitalocean
+attributes:
+    - id
+    - name
+    - memory
+    - vcpus
+    - disk
+    - size
+    - image
+    - networks
+    - volume_ids
+    - tags
+    - region
+
+compose:
+    ansible_host: do_networks.v4 | selectattr('type','eq','public')
+          | map(attribute='ip_address') | first
