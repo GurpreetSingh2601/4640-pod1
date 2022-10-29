@@ -13,7 +13,7 @@ ssh root@<vm public ipv4 address>
 vim ansible.cfg
 ```
 ##### which contains the following:
-```
+```bash
 [defaults]
 host_key_checking = False
 inventory = inventory
