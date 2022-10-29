@@ -1,0 +1,50 @@
+---
+
+- name: installing podman
+  hosts: all
+  tasks: 
+    - name: updating cache in ubuntu
+      become: true
+      ansible.builtin.apt:
+        update_cache: yes
+        cache_valid_time: 1000
+        name:
+          - podman
+      when: ansible_distribution in ["Ubuntu"]
+
+    - name: upgrading dnf in rocky
+      become: true
+      ansible.builtin.dnf:
+        name: podman
+        state: latest
+        update_cache: yes
+      when: ansible_distribution in ["Rocky"]
+
+    - name: start podman
+      become: true
+      systemd:
+        daemon-reload: true
+        name: podman
+        enabled: yes
+        state: started
+
+    - name: pull nginx podman image
+      podman_image:
+        name: docker.io/nginx
+        tag: latest
+
+    - name: run nginx image
+      containers.podman.podman_container:
+        name: nginx_container
+        image: docker.io/nginx:latest
+        recreate: yes
+        state: started
+        ports:
+          - "8080:8080"
+      
+  
+
+
+
+
+

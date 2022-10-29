@@ -1,0 +1,66 @@
+---
+
+- name: creating a new user
+  hosts: all
+  tasks:
+    - name: add a new user in ubuntu
+      become: true
+      user:
+        name: week4user
+        password: "{{ 'week4user' | password_hash('sha512') }}" 
+        groups: "sudo"
+        state: present
+        shell: "/bin/bash"
+        createhome: true
+        home: /home
+        append: yes
+
+      when: ansible_distribution in ["Ubuntu"]
+
+    - name: add a new user in Rocky Linux
+      become: true
+      user:
+        name: week4user
+        password: "{{ 'week4user' | password_hash('sha512') }}" 
+        append: yes
+        create_home: true
+        home: /home
+        shell: "/bin/bash"
+        groups: "wheel"
+        
+      when: ansible_distribution in ["Rocky"]
+
+    - name: copy the ssh folder
+      become: true
+      copy:
+        src: ~/.ssh
+        dest: /home/week4user/
+        owner: week4user
+        group: week4user
+
+    - name: Configure sshd, disable root login
+      become: true
+      lineinfile:
+        path: "/etc/ssh/sshd_config"
+        regexp: "^PermitRootLogin"
+        line: "PermitRootLogin yes"
+        state: present
+    
+    - name: restart sshd in Rocky
+      become: true
+      systemd:
+        daemon-reload: true
+        name: sshd
+        state: restarted
+      when: ansible_distribution in ["Rocky"]
+
+    - name: restart sshd in Ubuntu22
+      become: true
+      systemd:
+        name: sshd
+        state: restarted
+      when: ansible_distribution in ["Ubuntu"]
+
+...
+
+      

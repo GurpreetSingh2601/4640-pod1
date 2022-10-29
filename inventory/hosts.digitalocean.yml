@@ -11,6 +11,8 @@ attributes:
     - volume_ids
     - tags
     - region
+groups:
+  webservers: "'web' in (do_tags)"
 
 compose:
     ansible_host: do_networks.v4 | selectattr('type','eq','public')
