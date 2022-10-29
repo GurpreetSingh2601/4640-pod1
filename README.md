@@ -138,7 +138,7 @@ vim create_user.yml
         name: sshd
         state: restarted
       when: ansible_distribution in ["Rocky"]
-	
+    
     - name: restart sshd in Ubuntu22
       become: true
       systemd:
