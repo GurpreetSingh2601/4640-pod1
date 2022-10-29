@@ -21,8 +21,8 @@ inventory = inventory
 [inventory]
 enabled_plugins = community.digitalocean.digitalocean
 ```
-###2. Generate a new API token 
-###Note- We are creating API token in digital ocean, after creating it we need to copy and save it in a .profile file to export it and use it
+### 2. Generate a new API token 
+### Note- We are creating API token in digital ocean, after creating it we need to copy and save it in a .profile file to export it and use it
 
 ```bash
 export DO_API_TOKEN=<Digital ocean API token>
@@ -39,8 +39,8 @@ touch ./inventory/host.digital_ocean.yml
 ```
 
 ##### which contains the following:
-###Note - To use the following configurations your VM's group name should be webserver and they have tag named "web" attached to them
-```
+### Note - To use the following configurations your VM's group name should be webserver and they have tag named "web" attached to them
+```bash
 plugin: community.digitalocean.digitalocean
 attributes:
   - id
@@ -61,13 +61,13 @@ compose:
     | map(attribute='ip_address') | first
 
 ```
-#####To test the ansible set up 
-```
+##### To test the ansible set up 
+```bash
 ansible -m ping -u root all
 ```
 
 ##### checking the ansible inventory graph
-```
+```bash
 $ ansible-inventory --graph
 ```
 # Creating Ansible playbook
@@ -138,7 +138,6 @@ vim create_user.yml
         name: sshd
         state: restarted
       when: ansible_distribution in ["Rocky"]
-
 	
     - name: restart sshd in Ubuntu22
       become: true
